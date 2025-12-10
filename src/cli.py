@@ -8,8 +8,8 @@ import click
 from pathlib import Path
 from typing import Optional
 
-from .utils.console import hospital_console, print_header, print_info, print_success
-from .utils.logging_config import setup_hospital_logging, get_hospital_logger
+from utils.console import hospital_console, print_header, print_info, print_success
+from utils.logging_config import setup_hospital_logging, get_hospital_logger
 
 # Version info
 __version__ = "0.1.0"
