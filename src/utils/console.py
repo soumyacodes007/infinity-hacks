@@ -67,9 +67,9 @@ HOSPITAL_SPINNERS = {
     "pulse": Spinner("dots12", text="🫀", style="hospital.primary"),
     "scan": Spinner("line", text="🔍", style="agent.diagnostician"),
     "synthesis": Spinner("bouncingBall", text="💊", style="agent.pharmacist"),
-    "analysis": Spinner("brain", text="🧠", style="agent.neurologist"), 
-    "surgery": Spinner("monkey", text="🔧", style="agent.surgeon"),
-    "healing": Spinner("aesthetic", text="✨", style="hospital.success")
+    "analysis": Spinner("dots", text="🧠", style="agent.neurologist"), 
+    "surgery": Spinner("arc", text="🔧", style="agent.surgeon"),
+    "healing": Spinner("star", text="✨", style="hospital.success")
 }
 
 class HospitalConsole:
