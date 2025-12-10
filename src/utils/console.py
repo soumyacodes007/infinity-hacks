@@ -52,13 +52,13 @@ HOSPITAL_THEME = Theme({
     "status.failed": "red",
     
     # UI elements
-    "header": "bold hospital.primary",
-    "subheader": "hospital.secondary",
-    "emphasis": "bold hospital.accent",
-    "success": "bold hospital.success",
-    "warning": "bold hospital.warning", 
-    "error": "bold hospital.error",
-    "info": "hospital.info"
+    "header": "bold #2E8B57",
+    "subheader": "#4682B4",
+    "emphasis": "bold #DC143C",
+    "success": "bold #32CD32",
+    "warning": "bold #FF8C00", 
+    "error": "bold #FF4500",
+    "info": "#4169E1"
 })
 
 # Custom hospital spinners
