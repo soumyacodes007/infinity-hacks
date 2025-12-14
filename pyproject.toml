@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oumi-hospital"
-version = "0.1.0"
-description = "🏥 Automated AI Model Diagnosis, Repair, and Validation using Oumi"
+version = "1.0.1"
+description = "🏥 LLM-Powered Multi-Agent AI Model Repair System - Revolutionary autonomous diagnosis, treatment, and healing of unsafe AI models"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Oumi Hospital Team", email = "hospital@oumi.ai"}
+    {name = "Oumi Hospital Team", email = "contact@oumi-hospital.ai"}
 ]
 keywords = ["ai", "llm", "model-repair", "safety", "alignment", "oumi"]
 classifiers = [
@@ -27,17 +27,18 @@ classifiers = [
 ]
 
 dependencies = [
-    "oumi[gpu,evaluation]>=0.1.0",
-    "click>=8.0.0",
+    "groq>=0.4.0",
     "rich>=13.0.0",
+    "click>=8.0.0",
     "pyyaml>=6.0.0",
+    "transformers>=4.30.0",
+    "torch>=2.0.0",
     "datasets>=2.0.0",
     "pandas>=2.0.0",
-    "anthropic>=0.25.0",
-    "openai>=1.0.0",
-    "jinja2>=3.0.0",
-    "tqdm>=4.65.0",
     "numpy>=1.24.0",
+    "tqdm>=4.65.0",
+    "jinja2>=3.0.0",
+    "python-dotenv>=1.0.0",
 ]
 
 [project.optional-dependencies]
@@ -51,13 +52,14 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/oumi-ai/oumi-hospital"
-Repository = "https://github.com/oumi-ai/oumi-hospital"
-Documentation = "https://github.com/oumi-ai/oumi-hospital/blob/main/README.md"
-"Bug Tracker" = "https://github.com/oumi-ai/oumi-hospital/issues"
+Homepage = "https://github.com/soumyacodes007/infinity-hacks"
+Repository = "https://github.com/soumyacodes007/infinity-hacks"
+Documentation = "https://github.com/soumyacodes007/infinity-hacks/blob/master/README.md"
+"Bug Tracker" = "https://github.com/soumyacodes007/infinity-hacks/issues"
 
 [project.scripts]
 oumi-hospital = "oumi_hospital.cli:main"
+oumi-hospital-demo = "oumi_hospital.demo:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
