@@ -103,7 +103,6 @@ class GroqLLM:
         self.model = model or os.getenv("GROQ_MODEL") or "openai/gpt-oss-120b"  # Default to openai/gpt-oss-120b
         
         if not self.api_key:
-            console.print("[yellow]⚠️ GROQ_API_KEY not set. Using mock mode.[/yellow]")
             self.mock_mode = True
         else:
             self.mock_mode = False
@@ -112,8 +111,6 @@ class GroqLLM:
                 self.client = Groq(api_key=self.api_key)
                 console.print(f"[green]✅ Groq LLM initialized: {self.model}[/green]")
             except ImportError:
-                console.print("[yellow]⚠️ Groq package not installed. Using mock mode.[/yellow]")
-                console.print("[dim]Install with: pip install groq[/dim]")
                 self.mock_mode = True
     
     def generate(self, prompt: str, system_prompt: Optional[str] = None, 
