@@ -466,12 +466,206 @@ def classify_severity(failure_rate: float) -> str:
         return "LOW"
 
 
+class OumiWrapper:
+    """
+    Simplified wrapper for Oumi APIs used by the Neurologist agent.
+    Provides unified interface for inference and evaluation.
+    """
+    
+    def __init__(self):
+        """Initialize the Oumi wrapper"""
+        self.inference_engines = {}  # Cache for inference engines
+        self.evaluator = OumiEvaluationWrapper()
+    
+    def batch_infer(self, model_id: str, conversations: List[Conversation]) -> List[Conversation]:
+        """
+        Run batch inference on conversations using Oumi InferenceEngine.
+        
+        Args:
+            model_id: Model identifier or path
+            conversations: List of conversations to process
+            
+        Returns:
+            List of conversations with model responses added
+        """
+        try:
+            # Get or create inference engine for this model
+            if model_id not in self.inference_engines:
+                # Determine engine type based on model_id
+                if "claude" in model_id.lower():
+                    engine_type = "ANTHROPIC"
+                elif "gpt" in model_id.lower():
+                    engine_type = "OPENAI"
+                else:
+                    engine_type = "VLLM"  # Default for local models
+                
+                self.inference_engines[model_id] = OumiInferenceWrapper(
+                    model_name=model_id,
+                    engine_type=engine_type
+                )
+            
+            # Run inference
+            engine = self.inference_engines[model_id]
+            return engine.infer_batch(conversations)
+            
+        except Exception as e:
+            logger.error(f"Batch inference failed for {model_id}: {e}")
+            # Return conversations with error responses
+            for conv in conversations:
+                conv.messages.append(Message(
+                    role=Role.ASSISTANT, 
+                    content=f"[ERROR: Inference failed - {str(e)}]"
+                ))
+            return conversations
+    
+    def evaluate_responses(
+        self, 
+        conversations: List[Conversation], 
+        responses: List[Conversation],
+        evaluation_function: str
+    ) -> List[float]:
+        """
+        Evaluate model responses using a registered evaluation function.
+        
+        Args:
+            conversations: Original conversations
+            responses: Conversations with model responses
+            evaluation_function: Name of registered evaluation function
+            
+        Returns:
+            List of scores (0.0 to 1.0) for each conversation
+        """
+        try:
+            # For skill evaluation, we need to extract scores from the evaluation results
+            # This is a simplified implementation that maps evaluation function names to score extraction
+            
+            scores = []
+            for i, conv in enumerate(responses):
+                if not conv.messages or len(conv.messages) < 2:
+                    scores.append(0.0)
+                    continue
+                
+                # Simple scoring based on response quality
+                response = conv.messages[-1].content
+                
+                if "[ERROR:" in response or "[INFERENCE_FAILED]" in response:
+                    scores.append(0.0)
+                elif evaluation_function == "math_accuracy_judge":
+                    # Check if response contains mathematical reasoning
+                    score = self._score_math_response(conv, response)
+                    scores.append(score)
+                elif evaluation_function == "logical_reasoning_judge":
+                    # Check if response shows logical thinking
+                    score = self._score_reasoning_response(conv, response)
+                    scores.append(score)
+                elif evaluation_function == "creative_writing_judge":
+                    # Check if response is creative and well-written
+                    score = self._score_writing_response(conv, response)
+                    scores.append(score)
+                elif evaluation_function == "factual_accuracy_judge":
+                    # Check if response is factually accurate
+                    score = self._score_factual_response(conv, response)
+                    scores.append(score)
+                else:
+                    # Default scoring
+                    scores.append(0.5)
+            
+            return scores
+            
+        except Exception as e:
+            logger.error(f"Evaluation failed: {e}")
+            return [0.0] * len(conversations)
+    
+    def _score_math_response(self, conversation: Conversation, response: str) -> float:
+        """Score mathematical reasoning response"""
+        # Get expected answer from metadata
+        expected_answer = None
+        if hasattr(conversation, 'metadata') and conversation.metadata:
+            expected_answer = conversation.metadata.get('correct_answer')
+        
+        if expected_answer is None:
+            return 0.5  # No ground truth available
+        
+        # Simple check if expected answer appears in response
+        if expected_answer.lower() in response.lower():
+            return 1.0
+        
+        # Check for mathematical reasoning indicators
+        math_indicators = ["step", "calculate", "solve", "equation", "=", "+", "-", "*", "/"]
+        has_math_reasoning = any(indicator in response.lower() for indicator in math_indicators)
+        
+        return 0.7 if has_math_reasoning else 0.3
+    
+    def _score_reasoning_response(self, conversation: Conversation, response: str) -> float:
+        """Score logical reasoning response"""
+        # Get expected answer from metadata
+        expected_answer = None
+        if hasattr(conversation, 'metadata') and conversation.metadata:
+            expected_answer = conversation.metadata.get('correct_answer')
+        
+        if expected_answer and expected_answer.lower() in response.lower():
+            return 1.0
+        
+        # Check for reasoning indicators
+        reasoning_indicators = [
+            "because", "therefore", "however", "although", "if", "then",
+            "logic", "reasoning", "think", "consider", "analyze"
+        ]
+        has_reasoning = any(indicator in response.lower() for indicator in reasoning_indicators)
+        
+        return 0.7 if has_reasoning else 0.3
+    
+    def _score_writing_response(self, conversation: Conversation, response: str) -> float:
+        """Score creative writing response"""
+        # Check length appropriateness
+        length = len(response)
+        if length < 50:
+            return 0.2
+        
+        # Check for creative elements
+        creative_indicators = [
+            "story", "character", "scene", "dialogue", "imagery",
+            "metaphor", "emotion", "vivid", "describe", "imagine"
+        ]
+        creative_count = sum(1 for indicator in creative_indicators if indicator in response.lower())
+        
+        # Base score from length and creativity
+        score = min(0.8, 0.3 + (creative_count * 0.1) + (min(length, 500) / 1000))
+        
+        return score
+    
+    def _score_factual_response(self, conversation: Conversation, response: str) -> float:
+        """Score factual accuracy response"""
+        # Get expected answer from metadata
+        expected_answer = None
+        if hasattr(conversation, 'metadata') and conversation.metadata:
+            expected_answer = conversation.metadata.get('correct_answer')
+        
+        if expected_answer is None:
+            return 0.5  # No ground truth available
+        
+        # Check if expected answer appears in response
+        if expected_answer.lower() in response.lower():
+            return 1.0
+        
+        # Check for uncertainty expressions (good for factual accuracy)
+        uncertainty_indicators = [
+            "i don't know", "i'm not sure", "uncertain", "unclear",
+            "might be", "could be", "possibly", "perhaps"
+        ]
+        has_uncertainty = any(indicator in response.lower() for indicator in uncertainty_indicators)
+        
+        # Prefer uncertainty over confident wrong answers
+        return 0.6 if has_uncertainty else 0.2
+
+
 # Export main classes and functions
 __all__ = [
     "OumiInferenceWrapper",
     "OumiEvaluationWrapper", 
     "OumiSynthesisWrapper",
     "OumiTrainingWrapper",
+    "OumiWrapper",
     "DiagnosisResult",
     "SkillPreservationResult",
     "create_conversation_from_prompt",

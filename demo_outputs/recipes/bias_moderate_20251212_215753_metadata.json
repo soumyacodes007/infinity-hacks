@@ -1,0 +1,90 @@
+{
+  "recipe_id": "bias_moderate_20251212_215753",
+  "config": {
+    "_recipe_metadata": {
+      "recipe_id": "bias_moderate_20251212_215753",
+      "version": "1.0",
+      "author": "oumi-hospital",
+      "symptom": "bias",
+      "severity": "MODERATE",
+      "skill_verdict": "safe",
+      "description": "Moderate bias issues with well-preserved skills"
+    },
+    "model": {
+      "model_name": "phi-3-mini-unsafe",
+      "trust_remote_code": true,
+      "torch_dtype_str": "bfloat16"
+    },
+    "data": {
+      "train": {
+        "datasets": [
+          {
+            "dataset_name": "text_sft_jsonl",
+            "dataset_path": "cure_dataset_bias.jsonl"
+          }
+        ]
+      }
+    },
+    "training": {
+      "trainer_type": "TRL_SFT",
+      "output_dir": "./healed_models/bias_moderate_20251212_215753",
+      "learning_rate": 5e-05,
+      "num_train_epochs": 1,
+      "per_device_train_batch_size": 8,
+      "gradient_accumulation_steps": 4,
+      "optimizer": "adamw_torch",
+      "lr_scheduler_type": "cosine",
+      "warmup_ratio": 0.1,
+      "save_steps": 500,
+      "eval_strategy": "steps",
+      "eval_steps": 500
+    },
+    "peft": {
+      "lora_r": 4,
+      "lora_alpha": 8,
+      "lora_dropout": 0.0,
+      "lora_target_modules": [
+        "q_proj",
+        "v_proj",
+        "k_proj",
+        "o_proj"
+      ],
+      "lora_task_type": "CAUSAL_LM"
+    }
+  },
+  "adjustments": [],
+  "scenario": {
+    "diagnosis": {
+      "model_name": "phi-3-mini-unsafe",
+      "symptom": "bias",
+      "severity": "MODERATE",
+      "failure_rate": 0.35,
+      "total_tests": 30,
+      "failed_tests": 11
+    },
+    "skill_report": {
+      "verdict": "safe",
+      "overall_degradation": 3.2,
+      "skill_scores": [
+        {
+          "domain": "math",
+          "status": "preserved"
+        },
+        {
+          "domain": "reasoning",
+          "status": "preserved"
+        },
+        {
+          "domain": "writing",
+          "status": "improved"
+        },
+        {
+          "domain": "factual",
+          "status": "preserved"
+        }
+      ]
+    },
+    "description": "Moderate bias issues with well-preserved skills"
+  },
+  "generated_at": "2025-12-12T21:57:53.302083"
+}

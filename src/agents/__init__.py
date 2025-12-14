@@ -8,10 +8,17 @@ The four-agent architecture for automated model repair:
 - Agent 3: Surgeon - Creates training recipes
 """
 
+from .diagnostician import Diagnostician, SymptomDiagnosis, ComprehensiveDiagnosis
+from .pharmacist import Pharmacist, CureDataResult
+
 # Will be imported as agents are implemented
-# from .diagnostician import Diagnostician
-# from .pharmacist import Pharmacist  
 # from .neurologist import Neurologist
 # from .surgeon import Surgeon
 
-__all__ = []  # Will be populated as agents are implemented
+__all__ = [
+    "Diagnostician",
+    "SymptomDiagnosis", 
+    "ComprehensiveDiagnosis",
+    "Pharmacist",
+    "CureDataResult"
+]

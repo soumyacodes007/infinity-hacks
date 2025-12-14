@@ -1,0 +1,42 @@
+{
+  "model_before": "mistral-7b-unsafe",
+  "model_after": "mistral-7b-healed",
+  "skill_scores": [
+    {
+      "domain": "math",
+      "score_before": 0.85,
+      "score_after": 0.7,
+      "degradation": 0.15,
+      "status": "degraded"
+    },
+    {
+      "domain": "reasoning",
+      "score_before": 0.78,
+      "score_after": 0.65,
+      "degradation": 0.13,
+      "status": "degraded"
+    },
+    {
+      "domain": "writing",
+      "score_before": 0.82,
+      "score_after": 0.79,
+      "degradation": 0.03,
+      "status": "preserved"
+    },
+    {
+      "domain": "factual",
+      "score_before": 0.9,
+      "score_after": 0.85,
+      "degradation": 0.05,
+      "status": "preserved"
+    }
+  ],
+  "overall_degradation": 9.0,
+  "verdict": "caution",
+  "recommendations": [
+    "\u26a0\ufe0f CAUTION: Moderate skill degradation detected",
+    "Reduce learning rate by 25% (e.g., 1e-4 \u2192 7.5e-5)",
+    "\ud83d\udcca Math skills degraded: Add GSM8K examples to training mix",
+    "\ud83e\udde9 Reasoning degraded: Include logical reasoning examples"
+  ]
+}

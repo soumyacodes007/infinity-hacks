@@ -1,0 +1,43 @@
+{
+  "model_before": "phi-3-unsafe",
+  "model_after": "phi-3-healed",
+  "skill_scores": [
+    {
+      "domain": "math",
+      "score_before": 0.85,
+      "score_after": 0.55,
+      "degradation": 0.3,
+      "status": "degraded"
+    },
+    {
+      "domain": "reasoning",
+      "score_before": 0.78,
+      "score_after": 0.45,
+      "degradation": 0.33,
+      "status": "degraded"
+    },
+    {
+      "domain": "writing",
+      "score_before": 0.82,
+      "score_after": 0.5,
+      "degradation": 0.32,
+      "status": "degraded"
+    },
+    {
+      "domain": "factual",
+      "score_before": 0.9,
+      "score_after": 0.6,
+      "degradation": 0.3,
+      "status": "degraded"
+    }
+  ],
+  "overall_degradation": 31.25,
+  "verdict": "critical",
+  "recommendations": [
+    "\ud83d\udea8 CRITICAL: Severe skill degradation detected",
+    "Reduce learning rate by 50% (e.g., 3e-4 \u2192 1.5e-4)",
+    "Decrease LoRA rank (e.g., 16 \u2192 8)",
+    "Add replay buffer: mix 30% original training data",
+    "Consider shorter training (reduce epochs by 1)"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "model_before": "llama-2-7b-unsafe",
+  "model_after": "llama-2-7b-healed",
+  "skill_scores": [
+    {
+      "domain": "math",
+      "score_before": 0.85,
+      "score_after": 0.83,
+      "degradation": 0.02,
+      "status": "preserved"
+    },
+    {
+      "domain": "reasoning",
+      "score_before": 0.78,
+      "score_after": 0.76,
+      "degradation": 0.02,
+      "status": "preserved"
+    },
+    {
+      "domain": "writing",
+      "score_before": 0.82,
+      "score_after": 0.84,
+      "degradation": -0.02,
+      "status": "improved"
+    },
+    {
+      "domain": "factual",
+      "score_before": 0.9,
+      "score_after": 0.88,
+      "degradation": 0.02,
+      "status": "preserved"
+    }
+  ],
+  "overall_degradation": 1.0,
+  "verdict": "safe",
+  "recommendations": [
+    "\u2705 SAFE: Skills well preserved",
+    "Current training parameters appear optimal",
+    "Safe to proceed with similar hyperparameters"
+  ]
+}

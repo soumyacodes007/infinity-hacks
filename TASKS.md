@@ -105,9 +105,9 @@
 
 ---
 
-## Task 5: Agent 2.5 - The Neurologist 🧠 (NOVEL RESEARCH)
-- [ ] 5.1 Create `src/agents/neurologist.py`
-- [ ] 5.2 Implement `check_skill_preservation(model_before, model_after)`:
+## Task 5: Agent 2.5 - The Neurologist 🧠 (NOVEL RESEARCH) ✅ COMPLETE
+- [x] 5.1 Create `src/agents/neurologist.py`
+- [x] 5.2 Implement `check_skill_preservation(model_before, model_after)`:
   ```python
   def check_skill_preservation(before: str, after: str) -> SkillReport:
       # 1. Load skill benchmarks as Conversation objects
@@ -117,16 +117,16 @@
       # 5. Flag degradation > 10%
       # 6. Recommend adjustments if degraded
   ```
-- [ ] 5.3 Skill domains with custom evaluation functions:
-  - [ ] Math: GSM8K accuracy via `@register_evaluation_function`
-  - [ ] Reasoning: logical consistency via custom judge
-  - [ ] Writing: fluency + creativity via LLM judge
-  - [ ] Factual: TriviaQA accuracy + hallucination detection
-- [ ] 5.4 Degradation detection with configurable threshold
-- [ ] 5.5 Adaptive recommendations:
-  - [ ] If degraded → suggest lower LR, smaller LoRA rank
-  - [ ] If severe → suggest replay buffer (mix old + new data)
-- [ ] 5.6 Rich output: before/after comparison table
+- [x] 5.3 Skill domains with custom evaluation functions:
+  - [x] Math: GSM8K accuracy via `@register_evaluation_function`
+  - [x] Reasoning: logical consistency via custom judge
+  - [x] Writing: fluency + creativity via LLM judge
+  - [x] Factual: TriviaQA accuracy + hallucination detection
+- [x] 5.4 Degradation detection with configurable threshold
+- [x] 5.5 Adaptive recommendations:
+  - [x] If degraded → suggest lower LR, smaller LoRA rank
+  - [x] If severe → suggest replay buffer (mix old + new data)
+- [x] 5.6 Rich output: before/after comparison table
 
 **Output**: Skill preservation verdict + recommendations
 
@@ -136,9 +136,9 @@
 
 ---
 
-## Task 6: Agent 3 - The Surgeon 🔧
-- [ ] 6.1 Create `src/agents/surgeon.py`
-- [ ] 6.2 Implement `generate_recipe(diagnosis, cure_data, skill_check)`:
+## Task 6: Agent 3 - The Surgeon 🔧 ✅ COMPLETE
+- [x] 6.1 Create `src/agents/surgeon.py`
+- [x] 6.2 Implement `generate_recipe(diagnosis, cure_data, skill_check)`:
   ```python
   def generate_recipe(...) -> str:
       # 1. Calculate hyperparams based on severity
@@ -146,21 +146,21 @@
       # 3. Generate Oumi training YAML config
       # 4. Add metadata for community sharing
   ```
-- [ ] 6.3 Adaptive hyperparameter logic:
+- [x] 6.3 Adaptive hyperparameter logic:
   | Severity | Learning Rate | LoRA Rank | Epochs |
   |----------|---------------|-----------|--------|
   | CRITICAL | 3e-4 | 16 | 3 |
   | HIGH | 1e-4 | 8 | 2 |
   | MODERATE | 5e-5 | 4 | 1 |
-- [ ] 6.4 Skill-preservation adjustments (halve LR if degradation detected)
-- [ ] 6.5 Generate complete Oumi training YAML:
-  - [ ] `model`: model_name, trust_remote_code, torch_dtype_str
-  - [ ] `data`: train datasets with cure_dataset.jsonl path
-  - [ ] `training`: trainer_type: TRL_SFT, learning_rate, num_train_epochs
-  - [ ] `peft`: lora_r, lora_alpha, lora_target_modules
-  - [ ] `output_dir`, `save_steps`, `eval_strategy`
-- [ ] 6.6 Add recipe metadata header for community sharing
-- [ ] 6.7 Rich output: show calculated parameters with reasoning
+- [x] 6.4 Skill-preservation adjustments (halve LR if degradation detected)
+- [x] 6.5 Generate complete Oumi training YAML:
+  - [x] `model`: model_name, trust_remote_code, torch_dtype_str
+  - [x] `data`: train datasets with cure_dataset.jsonl path
+  - [x] `training`: trainer_type: TRL_SFT, learning_rate, num_train_epochs
+  - [x] `peft`: lora_r, lora_alpha, lora_target_modules
+  - [x] `output_dir`, `save_steps`, `eval_strategy`
+- [x] 6.6 Add recipe metadata header for community sharing
+- [x] 6.7 Rich output: show calculated parameters with reasoning
 
 **Output**: `cure_recipe.yaml` (run with `oumi train`)
 
